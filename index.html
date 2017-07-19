@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="example/index.css">
+    <title>Hello World</title>
+</head>
+
+<body>
+    <div id="vk-outer">
+        <div id="vk-container" class="clearfixed">
+
+            <div id="page_one" class="none" vk-role="page">
+                <header>
+                    <div class="header-con">
+                        <div class="title"><span>Page One</span></div>
+                        <div class="right" vk-goto="#page_two" vk-transition="slideLeft">
+                            <div><span>&gt;</span></div>
+                        </div>
+                    </div>
+                </header>
+                <section>
+                    <div style="font-size:50px;text-align:center;">one</div>
+                </section>
+            </div>
+
+            <div id="page_two" class="none" vk-role="page">
+                <header>
+                    <div class="header-con">
+                        <div class="title"><span>Page Two</span></div>
+                        <div class="left" vk-goto="" vk-transition="slideRight" vk-back="true">
+                            <div><span>&lt;</span></div>
+                        </div>
+                        <div class="right" vk-goto="#page_three" vk-transition="slideLeft">
+                            <div><span>&gt;</span></div>
+                        </div>
+                    </div>
+                </header>
+                <section>
+                    <div style="font-size:50px;text-align:center;">two</div>
+                </section>
+            </div>
+
+            <div id="page_three" class="none" vk-role="page">
+                <header>
+                    <div class="header-con">
+                        <div class="title"><span>Page Three</span></div>
+                        <div class="left" vk-goto="" vk-transition="slideRight" vk-back="true">
+                            <div><span>&lt;</span></div>
+                        </div>
+                    </div>
+                </header>
+                <section>
+                    <div style="font-size:50px;text-align:center;">three</div>
+                </section>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript" src="dev/libs/require-2.3.3.js"></script>
+
+    <script type="text/javascript">
+        require.config({
+            baseUrl: '/',
+            paths: {
+                'text': 'libs/text',
+                'jquery': 'libs/jquery-3.2.1.min',
+                'ejs': 'libs/ejs',
+                'signals': 'libs/signals',
+                'crossroads': 'libs/crossroads'
+                //'viking': 'src/viking.nohash.js?v=0.04'
+            }
+        });
+
+    </script>
+    <script type="text/javascript" src="dist/viking.min.js"></script>
+    <!-- <script type="text/javascript" src="dev/src/core.js"></script>
+    <script type="text/javascript" src="dev/src/util.js"></script>
+    <script type="text/javascript" src="dev/src/history.js"></script>
+    <script type="text/javascript" src="dev/src/view.js"></script>
+    <script type="text/javascript" src="dev/src/app.js"></script> -->
+    <script type="text/javascript">
+        require(['viking', 'viking/app', 'jquery', 'ejs'], function (viking) {
+
+            window.viking = viking;
+
+            //page one route
+            viking.defineController("page_one", {
+                route: "page_one",
+                rules: {
+
+                },
+                action: function () {
+
+                },
+                init: function () {
+                },
+                module: {
+                    hellow: function () {
+                        alert("hellow")
+                    }
+                }
+            });
+
+            //page two route
+            viking.defineController("page_two", {
+                route: "page_two",
+                rules: {
+
+                },
+                action: function () {
+
+                },
+                init: function () {
+                }
+            });
+
+            //page two route
+            viking.defineController("page_three", {
+                route: "page_three",
+                rules: {
+
+                },
+                action: function () {
+
+                },
+                init: function () {
+                }
+            });
+
+            viking.app.ready();
+            viking.app.goto("#page_one");
+
+        });
+    </script>
+</body>
+
+</html>
