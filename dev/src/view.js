@@ -18,6 +18,7 @@
 
         //声明 view
         define: function (pageName, template, data) {
+            pageName = viking.formatRouteName(pageName);
             this.pages[pageName] = {
                 template: template,
                 data: data

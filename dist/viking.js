@@ -2,7 +2,7 @@
  * viking <>
  * Author: indifer | MIT License
  * Email: indifer@126.com|liangyi_z@126.com
- * v0.2.0 (2017/07/19 14:24)
+ * v0.2.0 (2017/07/19 16:44)
  */
 
 
@@ -358,6 +358,7 @@
 
         //声明 view
         define: function (pageName, template, data) {
+            pageName = viking.formatRouteName(pageName);
             this.pages[pageName] = {
                 template: template,
                 data: data
@@ -413,10 +414,12 @@
     //viking.app.isAndroid = null;
     window.addEventListener("popstate", function () {
 
-        console.log(window.history.state);
         var state = window.history.state;
 
-        var popIndex = history.popTo(state.toRouteName);
+        var flag1 = state.toRoute.indexOf("#"), flag2 = state.toRoute.indexOf("?");
+        var route = state.toRoute.substring(flag1 > -1 ? flag1 + 1 : 0, flag2 > -1 ? flag2 : state.toRoute.length - 1);
+
+        var popIndex = history.popTo(route);
 
         pageTurn(state.toRoute, popIndex > 0, false);
 
@@ -480,6 +483,8 @@
         if (viking.controllers[toRouteName].existBeforeAction) {
             viking.gotoRouteBefore(toRoute.trim());
         }
+        
+        _this.transitionsFlag = 2;
         _this.transitions(transition, toRouteName, fromRouteName, null, callbackFunc);
 
     }
@@ -596,7 +601,6 @@
                 return;
             }
 
-            _this.transitionsFlag = 2;
             //var toRoute = toRoute;
             var toRouteName = viking.getRouteNameByRoute(toRoute);
 
@@ -628,7 +632,7 @@
                 return;
             }
 
-            if ($("#" + toRouteName).css("display") !== "none") {
+            if ($("#" + toRouteName).css("display") === "block") {
                 _this.transitionsFlag = 0;
                 return;
             }
@@ -638,7 +642,7 @@
             //history
             if (!back) {
 
-                var state = { toRoute: toRoute, toRouteName: toRouteName };
+                var state = { toRoute: toRoute };
                 if (viking.currentRoute) {
                     history.add(viking.currentRoute);
                     window.history.pushState(state, "", toRoute);
@@ -651,8 +655,8 @@
             }
             if (back) {
                 var popIndex = history.index(toRouteName);
-                if (popIndex > 0) {
-                    window.history.go(-popIndex);
+                if (popIndex >= 0) {
+                    window.history.go(-popIndex-1);
                     return;
                 }
             }
