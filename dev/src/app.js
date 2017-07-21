@@ -1,4 +1,4 @@
-;(function (global, factory) {
+; (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('viking'), require('viking/util'), require('viking/history'), require('viking/view')) :
         typeof define === 'function' && define.amd ? define('viking/app', ['viking', 'viking/util', 'viking/history', 'viking/view'], factory) :
             (factory(global['viking'], global['viking.util'], global['viking.history'], global['viking.view']));
@@ -16,14 +16,27 @@
     //viking.app.isAndroid = null;
     window.addEventListener("popstate", function () {
 
-        var state = window.history.state;
+        var toRoute = (window.history.state && window.history.state.toRoute);
+        if (toRoute) {
 
-        var flag1 = state.toRoute.indexOf("#"), flag2 = state.toRoute.indexOf("?");
-        var route = state.toRoute.substring(flag1 > -1 ? flag1 + 1 : 0, flag2 > -1 ? flag2 : state.toRoute.length - 1);
+            var toRouteName = viking.getRouteNameByRoute(toRoute);
+            if (util.isNullOrEmpty(toRouteName)) {
+                setTimeout(function () {
+                    viking.app.goto(toRoute);
+                }, 1)
+                return;
+            }
 
-        var popIndex = history.popTo(route);
+            var routeName = viking.formatRouteToRouteName(toRoute);
+            var popIndex = history.popTo(routeName);
 
-        pageTurn(state.toRoute, popIndex > 0, false);
+            pageTurn(toRoute, popIndex > 0, false);
+        }
+
+        toRoute = window.location.hash;
+        if (toRoute) {
+            viking.app.goto(toRoute);
+        }
 
     });
 
@@ -85,7 +98,7 @@
         if (viking.controllers[toRouteName].existBeforeAction) {
             viking.gotoRouteBefore(toRoute.trim());
         }
-        
+
         _this.transitionsFlag = 2;
         _this.transitions(transition, toRouteName, fromRouteName, null, callbackFunc);
 
@@ -181,8 +194,13 @@
         back: function (reset, transition) {
             var _this = this;
             var toRoute = history.last();
-            // var popArray = history.pop();
-            _this.goto(toRoute, true, reset, transition);
+            if (util.isNullOrEmpty(toRoute)) {
+                _this.homeRoute && _this.goto(_this.homeRoute);
+            }
+            else {
+                // var popArray = history.pop();
+                _this.goto(toRoute, true, reset, transition);
+            }
 
         },
 
@@ -226,7 +244,7 @@
                         _toRoute = _toRoute.substr(0, _i);
                     }
 
-                    require([_toRoute], function (_) {
+                    require([(viking.app.baseFolder || "") + _toRoute], function (_) {
                         _this.goto(toRoute, back, reset, transition, transitionsCallback, true);
                     });
                 }
@@ -258,7 +276,7 @@
             if (back) {
                 var popIndex = history.index(toRouteName);
                 if (popIndex >= 0) {
-                    window.history.go(-popIndex-1);
+                    window.history.go(-popIndex - 1);
                     return;
                 }
             }

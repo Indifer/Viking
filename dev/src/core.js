@@ -1,5 +1,5 @@
-    
-;(function (global, factory) {
+
+; (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('crossroads')) :
         typeof define === 'function' && define.amd ? define('viking', ['crossroads'], factory) :
             (global.viking = factory(global['crossroads']));
@@ -75,15 +75,30 @@
         // }
 
     };
+    //
+    Viking.prototype.formatRouteName = function (routeName) {
+
+        routeName = routeName.indexOf("#") > -1 ? routeName.substr(1) : routeName;
+        return routeName.replace(/\//g, '-');
+    };
 
     //
-    Viking.prototype.formatRouteName = function (route) {
-        return route.replace(/\//g, '-');
+    Viking.prototype.formatRoute = function (route) {
+
+        return route.indexOf("#") > -1 ? route.substr(1) : route;
+    };
+
+    //
+    Viking.prototype.formatRouteToRouteName = function (route) {
+
+        var flag1 = route.indexOf("#"), flag2 = route.indexOf("?");
+        route = route.substring(flag1 > -1 ? flag1 + 1 : 0, flag2 > -1 ? flag2 : route.length);
+        return route;
     };
 
     Viking.prototype.getRouteNameByRoute = function (route) {
-        route = route.indexOf("#") > -1 ? route.substr(1) : route;
 
+        route = this.formatRouteToRouteName(route);
         for (var n in this.controllers) {
 
             if (this.controllers[n].match(route)) {
