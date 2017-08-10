@@ -2,7 +2,7 @@
  * viking <>
  * Author: indifer | MIT License
  * Email: indifer@126.com|liangyi_z@126.com
- * v0.2.0 (2017/08/10 17:41)
+ * v0.2.0 (2017/08/10 18:50)
  */
 
 
@@ -696,7 +696,7 @@
             if (back) {
                 var popIndex = history.index(toRouteName);
                 if (popIndex >= 0) {
-                    window.history.go(-popIndex - 1);
+                    window.history.go(-popIndex);
                     return;
                 }
             }
