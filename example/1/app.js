@@ -18,7 +18,7 @@ app.start = function () {
             'viking/app': '../../dev/src/app',
         }
     };
-    opt.urlArgs = "v=0.10";
+    opt.urlArgs = "v=0.112";
     require.config(opt);
 
     require(['viking', 'viking/app', 'jquery', 'ejs'], function (viking) {

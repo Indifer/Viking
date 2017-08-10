@@ -2,7 +2,7 @@
  * viking <>
  * Author: indifer | MIT License
  * Email: indifer@126.com|liangyi_z@126.com
- * v0.2.0 (2017/07/20 19:37)
+ * v0.2.0 (2017/08/10 17:41)
  */
 
 
@@ -53,7 +53,6 @@
         var action = options.action;
         var beforeAction = options.beforeAction;
         var _route = this.crossroads.addRoute(options.route, function () {
-
             if (_this.routeType === 'action') {
                 var _r = routeName;
                 _this.currentRouteName = _r;
@@ -83,11 +82,13 @@
         // }
 
     };
+
     //
     Viking.prototype.formatRouteName = function (routeName) {
 
-        routeName = routeName.indexOf("#") > -1 ? routeName.substr(1) : routeName;
-        return routeName.replace(/\//g, '-');
+        // routeName = routeName.indexOf("#") > -1 ? routeName.substr(1) : routeName;
+        // return routeName.replace(/\//g, '-');
+        return routeName.indexOf("#") > -1 ? routeName.substr(1) : routeName;
     };
 
     //
@@ -104,9 +105,10 @@
         return route;
     };
 
+    //
     Viking.prototype.getRouteNameByRoute = function (route) {
 
-        route = this.formatRouteToRouteName(route);
+        route = this.formatRoute(route);
         for (var n in this.controllers) {
 
             if (this.controllers[n].match(route)) {
@@ -116,6 +118,7 @@
         return "";
     };
 
+    //
     Viking.prototype.getRouteByParameter = function (routeName, parameter) {
 
         var route = this.controllers[routeName];
@@ -124,6 +127,7 @@
         return route.interpolate(parameter);
     };
 
+    //
     Viking.prototype.onRouteChange = function (reset) {
         reset = reset || false;
         if (reset) {
@@ -134,6 +138,7 @@
         crossroads.parse(n);
     };
 
+    //
     Viking.prototype.gotoRoute = function (toRoute, reset) {
         this.routeType = 'action';
         this.lastRoute = this.currentRoute;
@@ -145,6 +150,7 @@
         this.onRouteChange(reset);
     };
 
+    //
     Viking.prototype.gotoRouteBefore = function (toRoute) {
 
         this.routeType = 'beforeAction';
@@ -154,6 +160,7 @@
         crossroads.resetState();
     };
 
+    //
     Viking.prototype.extend = function (target, src) {
         for (var key in src) {
             if (src.hasOwnProperty(key)) {
@@ -530,8 +537,8 @@
 
             //var browserVariables = mad.browserVariables;
 
-            show = "#" + show;
-            hide = !util.isNullOrEmpty(hide) ? "#" + hide : null;
+            show = show;
+            hide = !util.isNullOrEmpty(hide) ? hide : null;
             var w = $(window).width();
             var h = $(window).height();
             speed = speed || 300;
@@ -553,14 +560,14 @@
                 case "none"://不执行任何动画
                 default:
                     if (hide) {
-                        $(hide).css({
+                        $(document.getElementById(hide)).css({
                             "left": 0,
                             "top": 0,
                             "opacity": 1
                         });
                     }
 
-                    $(show).css({
+                    $(document.getElementById(show)).css({
                         "left": 0,
                         "top": 0,
                         "opacity": 1
@@ -574,12 +581,12 @@
                     //    _option[transition_duration] = "0s";
                     //}
 
-                    $(show).css(_option);
+                    $(document.getElementById(show)).css(_option);
                     if (hide) {
-                        $(hide).css(_option);
-                        $(hide).hide();
+                        $(document.getElementById(hide)).css(_option);
+                        $(document.getElementById(hide)).hide();
                     }
-                    $(show).show();
+                    $(document.getElementById(show)).show();
 
                     //_option["left"] = 0;
                     //_option["top"] = 0;
@@ -604,7 +611,7 @@
          * @param {String} transition 暂时废弃
          * @param {String} transitionsCallback 暂时废弃
          */
-        back: function (reset, transition) {
+        back: function (reset, transition, transitionsCallback) {
             var _this = this;
             var toRoute = history.last();
             if (util.isNullOrEmpty(toRoute)) {
@@ -641,23 +648,23 @@
                 _this.transitionsFlag = 0;
                 if (!tryAmded && !util.isNullOrEmpty(toRoute)) {
 
-                    var _toRoute;
+                    var _source;
                     var _i = toRoute.indexOf('#');
                     if (_i > -1) {
 
-                        _toRoute = toRoute.substr(_i + 1);
+                        _source = toRoute.substr(_i + 1);
                     }
                     else {
-                        _toRoute = toRoute;
+                        _source = toRoute;
                     }
 
-                    _i = _toRoute.indexOf('?');
+                    _i = _source.indexOf('?');
                     if (_i > -1) {
 
-                        _toRoute = _toRoute.substr(0, _i);
+                        _source = _source.substr(0, _i);
                     }
 
-                    require([(viking.app.baseFolder || "") + _toRoute], function (_) {
+                    require([(viking.app.baseFolder || "") + _source], function (_) {
                         _this.goto(toRoute, back, reset, transition, transitionsCallback, true);
                     });
                 }
@@ -665,7 +672,7 @@
                 return;
             }
 
-            if ($("#" + toRouteName).css("display") === "block") {
+            if ($(document.getElementById(toRouteName)).css("display") === "block") {
                 _this.transitionsFlag = 0;
                 return;
             }
@@ -701,7 +708,7 @@
         initPage: function (id) {
             var _this = this;
 
-            var page = $("#" + id);
+            var page = $(document.getElementById(id));
             if (page.length == 0 && view && view.getPage) {
 
                 if (_this.showLoading) {

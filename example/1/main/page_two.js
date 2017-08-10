@@ -7,9 +7,10 @@
 
     //page two route
     viking.defineController(module.name, {
-        route: "main/page_two",
+        route: "main/page_two:?a:",
         rules: {},
-        action: function () {
+        action: function (a) {
+            console.log("a:" + JSON.stringify(a));
 
         },
         init: function () {

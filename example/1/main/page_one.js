@@ -1,4 +1,4 @@
-; define(['viking', 'text!view/main/page_one.ejs'], function (viking, temp) {
+; define(['viking', 'text!view/main/page_one.ejs?v=1'], function (viking, temp) {
 
     var module = {
         name: 'main/page_one'

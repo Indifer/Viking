@@ -45,7 +45,6 @@
         var action = options.action;
         var beforeAction = options.beforeAction;
         var _route = this.crossroads.addRoute(options.route, function () {
-
             if (_this.routeType === 'action') {
                 var _r = routeName;
                 _this.currentRouteName = _r;
@@ -75,11 +74,13 @@
         // }
 
     };
+
     //
     Viking.prototype.formatRouteName = function (routeName) {
 
-        routeName = routeName.indexOf("#") > -1 ? routeName.substr(1) : routeName;
-        return routeName.replace(/\//g, '-');
+        // routeName = routeName.indexOf("#") > -1 ? routeName.substr(1) : routeName;
+        // return routeName.replace(/\//g, '-');
+        return routeName.indexOf("#") > -1 ? routeName.substr(1) : routeName;
     };
 
     //
@@ -96,9 +97,10 @@
         return route;
     };
 
+    //
     Viking.prototype.getRouteNameByRoute = function (route) {
 
-        route = this.formatRouteToRouteName(route);
+        route = this.formatRoute(route);
         for (var n in this.controllers) {
 
             if (this.controllers[n].match(route)) {
@@ -108,6 +110,7 @@
         return "";
     };
 
+    //
     Viking.prototype.getRouteByParameter = function (routeName, parameter) {
 
         var route = this.controllers[routeName];
@@ -116,6 +119,7 @@
         return route.interpolate(parameter);
     };
 
+    //
     Viking.prototype.onRouteChange = function (reset) {
         reset = reset || false;
         if (reset) {
@@ -126,6 +130,7 @@
         crossroads.parse(n);
     };
 
+    //
     Viking.prototype.gotoRoute = function (toRoute, reset) {
         this.routeType = 'action';
         this.lastRoute = this.currentRoute;
@@ -137,6 +142,7 @@
         this.onRouteChange(reset);
     };
 
+    //
     Viking.prototype.gotoRouteBefore = function (toRoute) {
 
         this.routeType = 'beforeAction';
@@ -146,6 +152,7 @@
         crossroads.resetState();
     };
 
+    //
     Viking.prototype.extend = function (target, src) {
         for (var key in src) {
             if (src.hasOwnProperty(key)) {
