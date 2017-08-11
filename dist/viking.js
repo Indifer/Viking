@@ -2,7 +2,7 @@
  * viking <>
  * Author: indifer | MIT License
  * Email: indifer@126.com|liangyi_z@126.com
- * v0.2.0 (2017/08/10 18:50)
+ * v0.2.0 (2017/08/11 17:39)
  */
 
 
@@ -502,7 +502,7 @@
             if (fromRouteName !== "") {
                 if (typeof viking.controllers[fromRouteName].destroy === "function") {
                     viking.controllers[fromRouteName].destroy();
-                    viking.controllers[toRouteName].isInit = false;
+                    viking.controllers[fromRouteName].isInit = false;
                 }
             }
 

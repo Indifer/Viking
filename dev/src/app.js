@@ -82,7 +82,7 @@
             if (fromRouteName !== "") {
                 if (typeof viking.controllers[fromRouteName].destroy === "function") {
                     viking.controllers[fromRouteName].destroy();
-                    viking.controllers[toRouteName].isInit = false;
+                    viking.controllers[fromRouteName].isInit = false;
                 }
             }
 
