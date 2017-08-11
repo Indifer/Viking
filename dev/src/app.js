@@ -276,7 +276,7 @@
             if (back) {
                 var popIndex = history.index(toRouteName);
                 if (popIndex >= 0) {
-                    window.history.go(-popIndex - 1);
+                    window.history.go(-popIndex);
                     return;
                 }
             }
